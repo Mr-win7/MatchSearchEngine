@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'haystack',
     'rest_framework_swagger',
     'rest_framework',
+    'django_filters',
 
     'apiv1',
 ]
@@ -128,9 +129,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+'''
 REST_FRAMEWORK = {
         'DEFAULT_FILTER_BACKENDS':('django_filters.rest_framework.DjangoFilterBackend',)
 }
+'''
 
 HAYSTACK_CONNECTIONS = {
     'default': {
