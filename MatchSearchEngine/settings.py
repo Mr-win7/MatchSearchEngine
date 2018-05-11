@@ -133,7 +133,7 @@ REST_FRAMEWORK = {
 }
 
 HAYSTACK_CONNECTIONS = {
-    'DEFAULT': {
+    'default': {
         'ENGINE': 'apiv1.whoosh_cn_backend.WhooshEngine',
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
