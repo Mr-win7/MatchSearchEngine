@@ -1,0 +1,9 @@
+drf-haystack
+django==1.11
+djangorestframework==3.7.7
+django-haystack
+django-rest-swagger
+django-filter
+mysqlclient
+whoosh
+jieba

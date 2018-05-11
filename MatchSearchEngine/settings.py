@@ -25,7 +25,10 @@ SECRET_KEY = 'u1llzyj%t&_69jb=0r*c+#&0&!j6(5u@jc#3=afz%bpt5@qyih'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'match.search.tooyoungtoosimple.gq',
+    'localhost'
+]
 
 
 # Application definition
@@ -37,6 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'haystack',
+    'rest_framework_swagger',
+    'rest_framework',
+
+    'apiv1',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +127,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+        'DEFAULT_FILTER_BACKENDS':('django_filters.rest_framework.DjangoFilterBackend',)
+}
+
+HAYSTACK_CONNECTIONS = {
+    'DEFAULT': {
+        'ENGINE': 'apiv1.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
