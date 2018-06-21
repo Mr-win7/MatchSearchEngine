@@ -24,8 +24,7 @@ class MainDocumentSearchSerializer(HighlighterMixin, HaystackSerializer):
 '''
 
 class MainDocumentSearchSerializer(HighlighterMixin, HaystackSerializer):
-    highlighter_css_class = 'highlighted-class'
-    highlighter_html_tag = 'em'
+    highlighter_html_tag = 'b'
     class Meta:
         index_classes = [DocumentIndex]
         fields = ['text', 'time', 'department', 'content', 'title']
