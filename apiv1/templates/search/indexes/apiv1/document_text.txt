@@ -1,6 +1,4 @@
-{{ object.id }}
 {{ object.title }}
 {{ object.content }}
 {{ object.department }}
-{{ object.url }}
 {{ object.time }}

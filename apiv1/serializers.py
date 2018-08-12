@@ -27,5 +27,6 @@ class MainDocumentSearchSerializer(HighlighterMixin, HaystackSerializer):
     highlighter_html_tag = 'b'
     class Meta:
         index_classes = [DocumentIndex]
-        fields = ['text', 'time', 'department', 'content', 'title']
+        fields = [ 'time', 'department', 'title']
+        search_fields = ['text',]
 
