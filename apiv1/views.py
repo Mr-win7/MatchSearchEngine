@@ -7,13 +7,13 @@ from rest_framework import viewsets, filters
 from apiv1.models import *
 from apiv1.serializers import *
 from drf_haystack.viewsets import HaystackViewSet
-from drf_haystack.filters import HaystackFilter
+from apiv1.filters import SimplifiedHaystackFilter
 
 # Create your views here.
 
 class DocumentViewSet(HaystackViewSet):
     index_models = [Document]
     serializer_class = MainDocumentSearchSerializer
-    filter_backends = [HaystackFilter, filters.OrderingFilter, ]
+    filter_backends = [SimplifiedHaystackFilter, filters.OrderingFilter, ]
     ordering_fields = ['time',]
 
