@@ -148,4 +148,4 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
 
-MEDIA_URL = 'http://match.search.tooyoungtoosimple.gq/static/media'
+MEDIA_URL = 'http://match.search.tooyoungtoosimple.gq/static/media/'
