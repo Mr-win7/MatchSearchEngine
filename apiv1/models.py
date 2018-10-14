@@ -11,7 +11,10 @@ class Document(models.Model):
     content = models.TextField()
     department = models.CharField(max_length=255, blank=True)
     url = models.FileField()
-    time = models.DateField()
+    time = models.DateField(blank=True)
+    region = models.CharField(max_length=255, blank=True)
+    industry = models.CharField(max_length=255, blank=True)
+    category = models.CharField(max_length=255, blank=True)
 
     def save(self, *args, **kwargs):
         self.content = HanziConv.toSimplified(self.content)

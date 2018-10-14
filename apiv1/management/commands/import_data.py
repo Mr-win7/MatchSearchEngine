@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 import os
+import re
 import datetime
-import uuid
 from apiv1.models import Document
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
@@ -15,33 +15,47 @@ class Command(BaseCommand):
         init = options['init']
         text_filepath = init[0]
         raw_filepath = init[1]
-        file_list = os.listdir(text_filepath)
-        for filename in file_list:
-            content = ''
-            cache = filename[0:-4].split('@')
-            department = cache[0]
-            title = cache[1]
-            url = None
-            time = datetime.date.today()
-            target_filename = None
-            if os.path.isfile(raw_filepath + filename[0:-4] + '.doc'):
-                target_filename = raw_filepath + filename[0:-4] + '.doc'
-            if os.path.isfile(raw_filepath + filename[0:-4] + '.docx'):
-                target_filename = raw_filepath + filename[0:-4] + '.docx'
-            if os.path.isfile(raw_filepath + filename[0:-4] + '.pdf'):
-                target_filename = raw_filepath + filename[0:-4] + '.pdf'
-            with open(text_filepath + filename, 'rb') as f:
-                content = f.read()
-                if target_filename is not None:
-                    with open(target_filename, 'rb') as target_f:
-                        url = File(target_f)
-                        url.name = url.name.decode('utf8')
-                        instance = Document(title=title.decode('utf8'), content=content.decode('utf8'), department=department.decode('utf8'), time=time, url=url)
-                        instance.save()
-                else:
-                    url = File(f)
-                    url.name = url.name.decode('utf8')
-                    instance = Document(title=title.decode('utf8'), content=content.decode('utf8'), department=department.decode('utf8'), time=time, url=url)
-                    instance.save()
+        for industry in os.listdir(raw_filepath):
+            for region in os.listdir(os.path.join(raw_filepath, industry)):
+                for category in os.listdir(os.path.join(raw_filepath, industry, region)):
+                    for filename in os.listdir(os.path.join(raw_filepath, industry, region, category)):
+                        if os.path.isdir(os.path.join(raw_filepath, industry, region, category, filename)):
+                            relative_path = os.path.join(industry, region, category, filename)
+                            for childname in os.listdir(os.path.join(raw_filepath, relative_path)):
+                                content = ''
+                                split_tuple = os.path.splitext(childname)
+                                title = filename + '-' + split_tuple[0]
+                                title_split = re.split(r'\s+', filename)
+                                department = title_split[-1] if len(title_split) > 1 else ""
+                                url = None
+                                time_list = re.findall(r'(\d+)\.(\d+)\.(\d+)', title)
+                                time = datetime.date(*map(int, time_list[-1])) if len(time_list) > 0 else None
+
+                                with open(os.path.join(text_filepath, relative_path, split_tuple[0] + '.txt'), 'rb') as f:
+                                    content = f.read()
+                                    with open(os.path.join(raw_filepath, relative_path, childname), 'rb') as target_f:
+                                        url = File(target_f)
+                                        url.name = url.name.decode('utf8')
+                                        instance = Document(title=title.decode('utf8'), content=content.decode('utf8'), department=department.decode('utf8'), time=time, url=url, region=region.decode('utf8'), industry=industry.decode('utf8'), category=category.decode('utf8'))
+                                        instance.save()
+                        else:
+                            relative_path = os.path.join(industry, region, category)
+                            content = ''
+                            split_tuple = os.path.splitext(filename)
+                            title = split_tuple[0]
+                            title_split = re.split(r'\s+', title)
+                            department = title_split[-1] if len(title_split) > 1 else ""
+                            url = None
+                            time_list = re.findall(r'(\d+)\.(\d+)\.(\d+)', title)
+                            time = datetime.date(*map(int, time_list[-1])) if len(time_list) > 0 else None
+ 
+
+                            with open(os.path.join(text_filepath, relative_path, split_tuple[0] + '.txt'), 'rb') as f:
+                                content = f.read()
+                                with open(os.path.join(raw_filepath, relative_path, filename), 'rb') as target_f:
+                                    url = File(target_f)
+                                    url.name = url.name.decode('utf8')
+                                    instance = Document(title=title.decode('utf8'), content=content.decode('utf8'), department=department.decode('utf8'), time=time, url=url, region=region.decode('utf8'), industry=industry.decode('utf8'), category=category.decode('utf8'))
+                                    instance.save()
 
 
